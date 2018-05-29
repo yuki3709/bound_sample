@@ -3,43 +3,54 @@
 <head>
     <title>Canvas tutorial template</title>
     <script type="text/javascript">
-        var speedX = 3.0;
-        var speedY = 4.0;
-        var locX = 200;
-        var locY = 150;
-        var ctx;
+        function Circle(speedX, speedY, locX, locY) {
+            this.speedX = speedX;
+            this.speedY = speedY;
+            this.locX = locX;
+            this.locY = locY;
+        }
+        var circle = [];
+        circle[0] = new Circle(3.0, 4.0, 200, 150);
+        circle[1] = new Circle(3.0, 4.0, 100, 50);
+        context;
+        var order = [roll, go, go];
 
         function init() {
             var canvas = document.getElementById('tutorial');
             if (canvas.getContext) {
-                ctx = canvas.getContext('2d');
+                context = canvas.getContext('2d');
                 setInterval(draw, 33);
             }
         }
 
         function draw() {
-            ctx.globalCompositeOperation = "source-over";
-            ctx.fillStyle = "rgb(8,8,12)";
-            ctx.fillRect(0, 0, 400, 300);
-            // ctx.globalCompositeOperation = "lighter";
+            context.globalCompositeOperation = "source-over";
+            context.fillStyle = "rgb(8,8,12)";
+            context.fillRect(0, 0, 400, 300);
+            //context.globalCompositeOperation = "lighter";
 
             //位置を更新
-            locX += speedX;
-            locY += speedY;
+            for (i = 0; i < circle.length; i++) {
+                circle[i].locX += circle[i].speedX;
+                circle[i].locY += circle[i].speedY;
 
-            if (locX < 0 || locX > 400) {
-                speedX *= -1;
+                if (circle[i].locX < 0 || circle[i].locX > 400) {
+                    circle[i].speedX *= -1;
+                }
+
+                if (circle[i].locY < 0 || circle[i].locY > 300) {
+                    circle[i].speedY *= -1;
+                }
             }
 
-            if (locY < 0 || locY > 300) {
-                speedY *= -1;
-            }
 
             //更新した座標で円を描く
-            ctx.beginPath();
-            ctx.fillStyle = '#3399FF';
-            ctx.arc(locX, locY, 4, 0, Math.PI * 2.0, true);
-            ctx.fill();
+            context.beginPath();
+            context.fillStyle = '#3399FF';
+            for (i = 0; i < circle.length; i++) {
+                context.arc(circle[i].locX, circle[i].locY, 4, 0, Math.PI * 2.0, true);
+            }
+            context.fill();
         }
     </script>
     <style type="text/css">
